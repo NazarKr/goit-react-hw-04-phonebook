@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import FilterContact from './FilterContacts/FilterContacts';
 import FormicContact from './FormContact/FormicContact';
 import ContactsList from './ContactList/ContactsList';
-import ModalWindow from './Modal/ModalWindow';
-import ButtonTxt from './Buttons/ButtonText';
+import ModalWindow from './shared/Modal/ModalWindow';
+import ButtonTxt from './shared/Buttons/ButtonText';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { PhoneBookDiv, PhoneBookH1, PhoneBookH2 } from './App.styled'
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid'
-import initialContacts from './Data/Contact.json'
+import initialContacts from '../components/shared/Data/Contact.json'
 import Notification from './Notification/Notification'
 
 export class App extends Component {

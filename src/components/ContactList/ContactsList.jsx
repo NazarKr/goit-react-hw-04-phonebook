@@ -1,6 +1,6 @@
 import React from 'react';
 import { ContactListUl, ContactItemLi, ContactName, ContactNumber } from './ContactsList.styled';
-import ButtonIcon from '../Buttons/ButtonIcon';
+import ButtonIcon from '../shared/Buttons/ButtonIcon';
 import PropTypes from 'prop-types';
 import { AiOutlineDelete } from 'react-icons/ai';
 
