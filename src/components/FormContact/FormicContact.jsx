@@ -5,7 +5,7 @@ import ButtonIcon from '../shared/Buttons/ButtonIcon';
 import { IoAddCircleOutline } from 'react-icons/io5';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 const FormicContact = (props) => {
     // eslint-disable-next-line no-unused-vars
@@ -69,11 +69,11 @@ const FormicContact = (props) => {
 }
 
 
-// FormicContact.propTypes = {
-//     values: PropTypes.arrayOf(PropTypes.shape({
-//         name: PropTypes.string.isRequired,
-//         number: PropTypes.string.isRequired,
-//     })),
-// }
+FormicContact.propTypes = {
+    values: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        number: PropTypes.string.isRequired,
+    })),
+}
 
 export default FormicContact;
