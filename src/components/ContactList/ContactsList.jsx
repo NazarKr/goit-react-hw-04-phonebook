@@ -1,7 +1,7 @@
 import React from 'react';
 import { ContactListUl, ContactItemLi, ContactName, ContactNumber } from './ContactsList.styled';
 import ButtonIcon from '../shared/Buttons/ButtonIcon';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { AiOutlineDelete } from 'react-icons/ai';
 
 
@@ -28,11 +28,11 @@ const ContactsList = ({ contacts, onDeleteContact }) => {
 
 export default ContactsList;
 
-ContactsList.propTypes = {
-    contacts: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        number: PropTypes.string.isRequired,
-    })),
-    onDeleteContact: PropTypes.func.isRequired,
-}
+// ContactsList.propTypes = {
+//     contacts: PropTypes.arrayOf(PropTypes.shape({
+//         id: PropTypes.string.isRequired,
+//         name: PropTypes.string.isRequired,
+//         number: PropTypes.string.isRequired,
+//     })),
+//     onDeleteContact: PropTypes.func.isRequired,
+// }
