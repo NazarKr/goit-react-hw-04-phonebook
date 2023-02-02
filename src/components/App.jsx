@@ -14,17 +14,15 @@ import { nanoid } from 'nanoid'
 import initialContacts from '../components/shared/Data/Contact.json'
 
 export const App = () => {
-  const [contacts, setContacts] = useState(initialContacts)
+  const [contacts, setContacts] = useState(
+    () => JSON.parse(localStorage.getItem(initialContacts)) ?? []
+  );
+
   const [filter, setFilter] = useState("");
   const [showModal, setShowModal] = useState(false); 
 
   useEffect(() => {
-    console.log('useEffect')
-    localStorage.setItem("contacts", JSON.stringify(contacts))
-
-    if (contacts) {
-      setContacts(contacts);
-    }
+    localStorage.setItem(initialContacts, JSON.stringify(contacts));
   }, [contacts]);
 
   const addContact = ({ name, number }) => {
@@ -41,18 +39,10 @@ export const App = () => {
 
         return [newContact, ...prevContacts]
       })
-
-      // setContacts([contact, ...contacts]);
     }
     toast.success('Contact successfully added!');
     // toggleModal();
     setShowModal(false)
-
-
-
-
-
-
   };
 
   const deleteContact = contactId => {
