@@ -14,35 +14,45 @@ import { nanoid } from 'nanoid'
 import initialContacts from '../components/shared/Data/Contact.json'
 
 export const App = () => {
-  const [contacts, setContacts] = useState(initialContacts);
+  const [contacts, setContacts] = useState(initialContacts)
   const [filter, setFilter] = useState("");
   const [showModal, setShowModal] = useState(false); 
 
   useEffect(() => {
-    const contacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(contacts);
+    console.log('useEffect')
+    localStorage.setItem("contacts", JSON.stringify(contacts))
 
-    if (parsedContacts) {
-      setContacts(parsedContacts);
+    if (contacts) {
+      setContacts(contacts);
     }
-  }, []);
+  }, [contacts]);
 
   const addContact = ({ name, number }) => {
-    const contact = {
-      id: nanoid(),
-      name,
-      number,
-    };
-
     if (contacts.find(contact => contact.name === name)) {
       toast.error(`Sorry, ${name} is already in contacts.`);
       return;
     } else {
-      setContacts([contact, ...contacts]);
+      setContacts(prevContacts => {
+        const newContact = {
+          id: nanoid(),
+          name,
+          number,
+        };
+
+        return [newContact, ...prevContacts]
+      })
+
+      // setContacts([contact, ...contacts]);
     }
     toast.success('Contact successfully added!');
     // toggleModal();
     setShowModal(false)
+
+
+
+
+
+
   };
 
   const deleteContact = contactId => {
@@ -95,6 +105,7 @@ export const App = () => {
           contacts={visibleContacts}
           onDeleteContact={deleteContact}
         />
+
         <ToastContainer
           position="top-center"
           autoClose={2000}
