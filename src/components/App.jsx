@@ -1,102 +1,82 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { useState, useEffect } from 'react';
 import FilterContact from './FilterContacts/FilterContacts';
 import FormicContact from './FormContact/FormicContact';
 import ContactsList from './ContactList/ContactsList';
-import ModalWindow from './Modal/ModalWindow';
-import ButtonTxt from './Buttons/ButtonText';
+import ModalWindow from './shared/Modal/ModalWindow';
+import Notification from './Notification/Notification'
+import ButtonTxt from './shared/Buttons/ButtonText';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { PhoneBookDiv, PhoneBookH1, PhoneBookH2 } from './App.styled'
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid'
-import initialContacts from './Data/Contact.json'
-import Notification from './Notification/Notification'
+import initialContacts from '../components/shared/Data/Contact.json'
 
-export class App extends Component {
-  state = {
-    contacts: initialContacts,
-    filter: '',
-    showModal: false,
-  }
+export const App = () => {
+  const [contacts, setContacts] = useState(initialContacts);
+  const [filter, setFilter] = useState("");
+  const [showModal, setShowModal] = useState(false); 
 
-  componentDidMount() {
+  useEffect(() => {
     const contacts = localStorage.getItem('contacts');
     const parsedContacts = JSON.parse(contacts);
 
     if (parsedContacts) {
-      this.setState({ contacts: parsedContacts });
+      setContacts(parsedContacts);
     }
-  };
+  }, []);
 
-  componentDidUpdate(prevState) {
-    const nextContacts = this.state.contacts;
-    const prevContacts = prevState.contacts;
-
-    if (nextContacts !== prevContacts) {
-      localStorage.setItem('contacts', JSON.stringify(nextContacts));
-    }
-  };
-
-  addContact = ({ name, number }) => {
+  const addContact = ({ name, number }) => {
     const contact = {
       id: nanoid(),
       name,
       number,
     };
 
-    if (this.state.contacts.find(contact => contact.name === name)) {
+    if (contacts.find(contact => contact.name === name)) {
       toast.error(`Sorry, ${name} is already in contacts.`);
       return;
     } else {
-      this.setState(({ contacts }) => ({
-        contacts: [contact, ...contacts],
-      }));
+      setContacts([contact, ...contacts]);
     }
     toast.success('Contact successfully added!');
-    this.toggleModal();
+    // toggleModal();
+    setShowModal(false)
   };
 
-  deleteContact = contactId => {
-    this.setState(({ contacts }) => ({
-      contacts: contacts.filter(contact => contact.id !== contactId),
-    }));
+  const deleteContact = contactId => {
+    setContacts(prevContacts => prevContacts.filter(contact => contact.id !== contactId),
+    );
     toast.info('Contact was deleted');
   };
 
-  changeFilter = e => {
-    this.setState({ filter: e.currentTarget.value });
-  };
+  const changeFilter = ({ target }) => setFilter(target.value);
 
-  getVisibleContacts = () => {
-    const { contacts, filter } = this.state;
+  const getVisibleContacts = () => {
     const normalizedFilter = filter.toLowerCase();
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter)
     );
   };
 
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }))
+  const toggleModal = () => {
+    setShowModal(!showModal);
   }
 
-  render() {
-    const { filter, showModal } = this.state;
-    const visibleContacts = this.getVisibleContacts();
-
+    const visibleContacts = getVisibleContacts();
 
     return (
       <PhoneBookDiv>
         <PhoneBookH1>Phonebook</PhoneBookH1>
-        <FilterContact value={filter} onChange={this.changeFilter} onClick={this.toggleModal} />
+        <FilterContact value={filter} onChange={changeFilter} onClick={toggleModal} />
 
         <PhoneBookH2>Contacts</PhoneBookH2>
 
         <ButtonTxt
           type="submit"
           text="Add contact"
-          onClick={this.toggleModal}
+          onClick={toggleModal}
           icon={AiOutlineUserAdd}
           iconSize={20}
           style={{
@@ -105,15 +85,15 @@ export class App extends Component {
         />
 
         {showModal && (
-          <ModalWindow onClose={this.toggleModal}>
-            <FormicContact onSubmit={this.addContact} onClick={this.toggleModal} />
+          <ModalWindow onClose={toggleModal}>
+            <FormicContact onSubmit={addContact} onClick={toggleModal} />
           </ModalWindow>
         )}
 
         {visibleContacts.length === 0 && <Notification message="There is no Contacts" />}
         <ContactsList
           contacts={visibleContacts}
-          onDeleteContact={this.deleteContact}
+          onDeleteContact={deleteContact}
         />
         <ToastContainer
           position="top-center"
@@ -124,5 +104,4 @@ export class App extends Component {
           Transition="zoom" />
       </PhoneBookDiv>
     )
-  };
 };
